@@ -1,6 +1,6 @@
 
 const svgElemnt = document.getElementById("map");
-const width = 100, height = 60, cellSize = 10;
+const width = 100, height = 50, cellSize = 10;
 
 const world = CreateWorld(svgElemnt, width, height, cellSize);
 
@@ -56,11 +56,49 @@ function applyNextState( world ) {
 }
 
 
+
+var interval;
+var isPlaying = false;
+
+const generationText = document.getElementById("span_generation");
+var generation = 0;
+var speed = 200;
+
+
 function Play(){
 
-    setInterval(function(){
+    if (isPlaying){
+        return;
+    }
+
+    interval = setInterval(function(){
+        generation++;
+        SetGeneration(generation);
         calculateNextState(world);
         applyNextState(world);
-    }, 100);
+    }, speed);
 
+    isPlaying = true;
+
+}
+
+function Pause(){
+    clearInterval(interval);
+    isPlaying = false;
+}
+
+
+const speedSlider = document.getElementById("speed_slider");
+function UpdateSpeed(){
+    speed = 200 / speedSlider.value;
+
+    if(isPlaying){
+        Pause();
+        Play();
+    }
+
+}
+
+function SetGeneration(generation){
+    generationText.innerHTML = generation;
 }

@@ -28,6 +28,28 @@
             </div>
         </div>
 
+        <div class="row" align="center" style="margin-top: 20px;" >
+            
+            <div class="col">
+                <button class="btn btn-primary btn-lg" onclick="Play();">Play</button>
+            </div>
+
+            <div class="col">
+                <span>Generation</br> <span id="span_generation">0</span> </span>
+            </div>
+
+            <div class="col">
+                <button class="btn btn-danger btn-lg" onclick="Pause();">Pause</button>
+            </div>
+
+        </div>
+
+        <div class="row" align="center" style="margin-top: 20px;" >
+            <div class="col">
+                <input id="speed_slider" onchange="UpdateSpeed();" type="range" class="form-range" style="width: 80%;" min="1" max="20" step="1" value="1">
+            </div>
+        </div>
+
     </div>
 
 
