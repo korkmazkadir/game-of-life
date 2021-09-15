@@ -16,7 +16,7 @@ function calculateNextState(world) {
                 cell.nextState = 0;
             } else if (cell.state == 1 && (liveNeighborCount == 2 || liveNeighborCount == 3)) {
                 cell.nextState = 1;
-            }else if(cell.state == 0 && liveNeighborCount == 3){
+            } else if (cell.state == 0 && liveNeighborCount == 3) {
 
                 cell.nextState = 1;
             }
@@ -36,7 +36,7 @@ function countLiveNeighbors(neighbors) {
     return count;
 }
 
-function applyNextState( world ) {
+function applyNextState(world) {
 
     for (var i = 0; i < world.height; i++) {
         for (var j = 0; j < world.width; j++) {
@@ -44,9 +44,9 @@ function applyNextState( world ) {
             const cell = world.cells[i][j];
             cell.state = cell.nextState;
 
-            if (cell.state == 1){
+            if (cell.state == 1) {
                 cell.rect.setAttributeNS(null, 'fill', 'black');
-            }else{
+            } else {
                 cell.rect.setAttributeNS(null, 'fill', 'white');
             }
 
@@ -65,13 +65,13 @@ var generation = 0;
 var speed = 200;
 
 
-function Play(){
+function Play() {
 
-    if (isPlaying){
+    if (isPlaying) {
         return;
     }
 
-    interval = setInterval(function(){
+    interval = setInterval(function () {
         generation++;
         SetGeneration(generation);
         calculateNextState(world);
@@ -82,23 +82,69 @@ function Play(){
 
 }
 
-function Pause(){
+function Pause() {
     clearInterval(interval);
     isPlaying = false;
 }
 
 
 const speedSlider = document.getElementById("speed_slider");
-function UpdateSpeed(){
+function UpdateSpeed() {
     speed = 200 / speedSlider.value;
 
-    if(isPlaying){
+    if (isPlaying) {
         Pause();
         Play();
     }
 
 }
 
-function SetGeneration(generation){
+function SetGeneration(generation) {
     generationText.innerHTML = generation;
 }
+
+
+function SaveState() {
+
+    const activeCells = [];
+
+    for (var i = 0; i < world.height; i++) {
+        for (var j = 0; j < world.width; j++) {
+            if (world.cells[i][j].state == true) {
+                activeCells.push({ x: j, y: i });
+            }
+
+        }
+    }
+
+    console.log(JSON.stringify(activeCells));
+    export2Json(activeCells)
+}
+
+
+function export2Json(cellState) {
+
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(cellState)], {
+        type: "text/plain"
+    }));
+    a.setAttribute("download", "cell_state.json");
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+
+
+
+
+let params = (new URL(document.location)).searchParams;
+let initialState = params.get('name');
+
+if (initialState) {
+    LoadState(initialState);
+}
+
+
+
+
